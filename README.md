@@ -19,3 +19,5 @@ or next one, if you want to specify config:
 ```
 python3 log_analyzer.py --config <PATH_TO_CONFIG>
 ```
+
+You will receive a html-report with calculated metrics at the output.
