@@ -12,10 +12,10 @@ Analyzer counts the following metrics:
 - time_med - the median $request_time for this URL
 
 To run the program, enter the folliwng code:
-```python
+```
 python3 log_analyzer.py
 ```
 or next one, if you want to specify config:
-```python
+```
 python3 log_analyzer.py --config <PATH_TO_CONFIG>
 ```
