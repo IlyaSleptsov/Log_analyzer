@@ -11,7 +11,7 @@ Analyzer counts the following metrics:
 - time_max - the maximum $request_time for this URL
 - time_med - the median $request_time for this URL
 
-To run the program, enter the folliwng code:
+To run the program, enter the following code:
 ```
 python3 log_analyzer.py
 ```
