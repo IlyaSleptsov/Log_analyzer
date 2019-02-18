@@ -33,6 +33,7 @@ config = {
     "TEMPLATE_FILE": 'report.html'
 }
 
+Logfile = namedtuple('logfile', ['name', 'date'])
 
 def count_median(lst):
     """Computes median of list"""
@@ -54,7 +55,6 @@ def get_dict_from_config(config_path):
 
 def get_last_log_file(path_to_file, regex=re.compile(config['REGEX'])):
     """Finds last log file by date"""
-    last_file = namedtuple('file', ['name', 'date'])
     log_name = log_date = None
     for file_name in os.listdir(path_to_file):
         match = re.search(regex, file_name)
@@ -67,7 +67,7 @@ def get_last_log_file(path_to_file, regex=re.compile(config['REGEX'])):
             if current_file_date > log_date:
                 log_name = os.path.join(path_to_file, file_name)
                 log_date = current_file_date
-    return last_file(name=log_name, date=log_date)
+    return Logfile(name=log_name, date=log_date)
 
 
 def parse_log_files(log_file):
@@ -98,7 +98,7 @@ def get_url_and_time(line):
 
 def extract_line_from_log_file(log_file,tresh=0.8):
     """Extracts information from log file lines """
-    url_stats = collections.defaultdict()
+    url_stats = collections.defaultdict(list)
     sum_urls = 0
     sum_time = 0
     sum_all = 0
@@ -107,7 +107,7 @@ def extract_line_from_log_file(log_file,tresh=0.8):
         if url and time:
             sum_urls += 1
             sum_time += time
-            url_stats[url] = url_stats.get(url, list()) + [time]
+            url_stats[url].append(time)
         sum_all += 1
     if sum_urls / sum_all < tresh:
         raise Exception("There are too many mistakes in log file line")
@@ -125,16 +125,6 @@ def extract_line_from_log_file(log_file,tresh=0.8):
         })
     result.sort(key=operator.itemgetter('time_sum'), reverse=True)
     return result
-
-
-def make_report_1(data_to_report, file_name, template_file):
-    """Generates report"""
-    template_report = string.Template('$json_table').substitute(json_table = json.dumps(data_to_report))
-    try:
-        with open(file_name, 'w') as f:
-            f.write(template_report)
-    except Exception as e:
-        logging.info('Problem with writing file: {}'.format(e))
 
 
 def make_report(data_to_report, file_name, template_file):

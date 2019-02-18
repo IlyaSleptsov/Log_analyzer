@@ -47,7 +47,7 @@ class LogAnalyzerTests(unittest.TestCase):
                                      'nginx-access-ui.log-20160730.py',
                                      'nginx-access-ui.log-20160730.something_wrong_again']
         last_file = log_analyzer.get_last_log_file(self.config['LOG_DIR'])
-        self.assertEqual(last_file.name, self.config['LOG_DIR'] + '\\' + 'nginx-access-ui.log-20170630.gz')
+        self.assertEqual(last_file.name, os.path.join(self.config['LOG_DIR'], 'nginx-access-ui.log-20170630.gz'))
 
     def test_extract_line_from_log_file(self):
         results = log_analyzer.extract_line_from_log_file(LOG_LINES)
